@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1> WEBSOCKET <h1></h1>
+
+        <script>
+    // const chatSocket = new WebSocket('ws://127.0.0.1:8000/ws/ac_websocket/');
+    const chatSocket = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+
+    chatSocket.onopen = function (e) {
+        console.log("WebSocket connected.");
+    };
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        const message = data['message'];
+        console.log("Received from server:", message); // <-- Added log
+    };
+
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    function sendMessage(message) {
+        console.log("Sending to server:", message); // <-- Added log
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+    }
+
+    // Example: send message after 1 second
+    setTimeout(() => {
+        sendMessage("Hello server!");
+    }, 1000);
+</script>
+
+
+</body>
+
+</html>
